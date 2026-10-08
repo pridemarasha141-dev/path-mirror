@@ -6,6 +6,5 @@ def init_db() -> None:
     Base.metadata.create_all(bind=engine)
     print("Tables created:", ", ".join(Base.metadata.tables))
 
-
 if __name__ == "__main__":
     init_db()
