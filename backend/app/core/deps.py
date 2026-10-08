@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from app.core.security import decode_access_token
 from app.db.session import get_db
 from app.models.user import User
+from sqlalchemy import select
+from app.models.goal import Goal
 
 bearer_scheme = HTTPBearer(auto_error=False)
 
@@ -27,3 +29,14 @@ def get_current_user(
     if user is None:
         raise unauthorized
     return user
+def get_owned_goal(
+    goal_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> Goal:
+    goal = db.scalar(
+        select(Goal).where(Goal.id == goal_id, Goal.user_id == current_user.id)
+    )
+    if goal is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Goal not found")
+    return goal
