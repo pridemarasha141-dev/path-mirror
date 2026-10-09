@@ -1,4 +1,4 @@
-from app.routers import auth, goals, sessions, topics
+from app.routers import analysis, auth, goals, sessions, topics
 from fastapi import FastAPI
 
 from app.core.config import settings
@@ -8,6 +8,7 @@ app.include_router(auth.router)
 app.include_router(goals.router)
 app.include_router(topics.router)
 app.include_router(sessions.router)
+app.include_router(analysis.router)
 
 @app.get("/health")
 def health():

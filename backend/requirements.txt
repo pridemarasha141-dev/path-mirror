@@ -16,7 +16,7 @@ idna==3.20
 iniconfig==2.3.0
 numpy==2.4.6
 packaging==26.3
-pandas==3.0.6
+pandas==2.3.3
 pluggy==1.6.0
 psycopg==3.3.6
 pydantic==2.13.5
@@ -28,6 +28,7 @@ pytest==9.1.1
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.3
 python-multipart==0.0.32
+pytz==2026.5
 PyYAML==6.0.3
 six==1.17.0
 SQLAlchemy==2.1.1
