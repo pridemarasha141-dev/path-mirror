@@ -1,7 +1,8 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
-
+from app.models.topic import Topic
+from app.models.study_session import StudySession
 from app.core.security import decode_access_token
 from app.db.session import get_db
 from app.models.user import User
@@ -40,3 +41,32 @@ def get_owned_goal(
     if goal is None:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Goal not found")
     return goal
+def get_owned_topic(
+    topic_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> Topic:
+    topic = db.scalar(
+        select(Topic)
+        .join(Goal, Topic.goal_id == Goal.id)
+        .where(Topic.id == topic_id, Goal.user_id == current_user.id)
+    )
+    if topic is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Topic not found")
+    return topic
+
+
+def get_owned_study_session(
+    session_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+) -> StudySession:
+    study_session = db.scalar(
+        select(StudySession)
+        .join(Topic, StudySession.topic_id == Topic.id)
+        .join(Goal, Topic.goal_id == Goal.id)
+        .where(StudySession.id == session_id, Goal.user_id == current_user.id)
+    )
+    if study_session is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Session not found")
+    return study_session
