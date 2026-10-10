@@ -1,7 +1,22 @@
+import { Route, Routes } from "react-router-dom";
+import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
+import Goals from "./pages/Goals";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
 export default function App() {
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-emerald-400">Path Mirror</h1>
-    </div>
-  )
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/goals" element={<Goals />} />
+        </Route>
+      </Route>
+    </Routes>
+  );
 }
